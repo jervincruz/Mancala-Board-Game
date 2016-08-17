@@ -9,9 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *  @author: Jervin Cruz
  *  Mancala Board Game
- * 
+ *  @author: Jervin Cruz, Chris Wong, Aidan Nguyen
  **/
 
 public class MancalaTest extends JFrame
@@ -42,32 +41,13 @@ public class MancalaTest extends JFrame
 			}
 		});
 		
-		JButton rect = new JButton("Rectangle");
-		rect.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				RectangleBoard b1 = new RectangleBoard(model);
-				style=new RectangleBoard(model);
-				model.attach(b1);
-				type = 1;
-				buildBoard();
-			}
-		});
-		
 		/* Start with 3 initial stones */
         JButton three = new JButton("3");
 		three.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				numStone = 3;
 			}
-		});
-		
-		/* Start with 4 initial stones */	
-		JButton four = new JButton("4");
-		four.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				numStone = 4;
-			}
-		});
+		});	
 		
 		/* Undo most recent move */
 		JButton undo = new JButton("Undo");
@@ -82,12 +62,7 @@ public class MancalaTest extends JFrame
 		JButton newGame = new JButton("New Game");
         newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				model = new GameModel(numStone);
-			    final CircleBoard b = new CircleBoard(model);
-				style = b;
-				model.attach(b);
-				buildBoard();
-				setBoard();
+				MancalaTest x = new MancalaTest();
 			}
 		});
 		
@@ -97,8 +72,7 @@ public class MancalaTest extends JFrame
 		getContentPane();
 		
         // Add Buttons   
-        player.add(rect);  player.add(circle); player.add(four); 
-        player.add(three); player.add(undo);   player.add(newGame);
+		player.add(undo);   player.add(newGame);
         
         player.setSize(75, 700);
                 
