@@ -11,7 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * The Control part of MVC - 
+ * @View
  * @author jervincruz
  * 
  */
@@ -34,9 +34,9 @@ public class CircleBoard implements BoardType, ChangeListener
 	}
 	
         	
-public void setInitial(int i){
-   initialStones = i;
-}
+	public void setInitial(int i){
+		initialStones = i;
+	}
    
 	public void defineMancala(){
 		Ellipse2D.Double mancala1 = new Ellipse2D.Double(0,0,width,2.5*width);
