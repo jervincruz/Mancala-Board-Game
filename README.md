@@ -8,4 +8,4 @@ In-Game Play Design:
 
 Player A's pits are the top 6 circles with the store being the LEFT oval /// 
 Player B has the bottom 6 with the store being the RIGHT oval ///
-First to strategically place 10 stones in player pit wins/// Click desired pits to advance stones
+First to strategically place 10 stones in player pit wins/// Upon player's turn, click on desired pit to advance stones
