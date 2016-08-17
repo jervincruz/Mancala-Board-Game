@@ -10,20 +10,18 @@ import javax.swing.JComponent;
  * Defines the board style
  */
 
-public class BoardComp extends JComponent
-{	
+public class BoardComp extends JComponent{	
 	private BoardType style;
 	
-	public BoardComp(BoardType b, final GameModel m)
-	{
+	public BoardComp(BoardType b, final GameModel m){
 		style = b;
 		
 		this.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
 					ArrayList<Shape> list = style.getList();
 					for(int i=0; i<list.size(); i++){
-						if(list.get(i).contains(e.getX(), e.getY()) && i!=6 && i!=13) // User's stores should not be clickable
-						{
+						// User's stores should not be able to be clicked on
+						if(list.get(i).contains(e.getX(), e.getY()) && i!=6 && i!=13){ 
 							m.makeMove(i); // if clicked on user turn's pit, make the move
 							repaint();
 						}
@@ -33,8 +31,7 @@ public class BoardComp extends JComponent
 	}
 	
         @Override
-	public void paintComponent(Graphics g)
-	{	
+	public void paintComponent(Graphics g){	
 		style.draw(g);
 	}
 }
