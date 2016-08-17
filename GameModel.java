@@ -3,31 +3,26 @@ import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
  
-/**
+/** 
+ * @Model - Contains methods of Game Mechanics such as: Player Turn, Switches, Stone Setting, Game Over Tracking
  * 
- * @author jervincruz
- *
- * The Model part of MVC - 
  */
 public class GameModel {
  
     public static enum Player {A, B};
-     
+    private ArrayList<ChangeListener> listeners;
     private int[] pits;
     private int[] lastPit;
     private int playerAUndos;
     private int playerBUndos;
     private Player currentPlayer;
     private boolean gameOver;
-    private boolean canUndo;
-     
-    private ArrayList<ChangeListener> listeners;
+    private boolean canUndo; 
      
     /**
      * GameModel - default constructor
      */
-    public GameModel(int stones)
-    {
+    public GameModel(int stones){
         pits = new int[14];
         lastPit = new int[14];
         playerAUndos = 0;
@@ -37,25 +32,21 @@ public class GameModel {
         listeners = new ArrayList<ChangeListener>();
         canUndo = false;
                 setStones(stones);
- 
     }
      
     /**
      * attach - attach a listener to the model
      * @param listener - listener that is notified when a change is made to the model
      */
-    public void attach(ChangeListener listener)
-    {
+    public void attach(ChangeListener listener){
         listeners.add(listener);
     }
      
     /**
      * notifyAllListeners - signals all listeners that a change has been made
      */
-    public void notifyAllListeners()
-    {
-        for (ChangeListener listener: listeners)
-        {
+    public void notifyAllListeners(){
+        for (ChangeListener listener: listeners){
             listener.stateChanged(new ChangeEvent(this));
         }
     }
@@ -64,13 +55,11 @@ public class GameModel {
      * GameModel constructor
      * @param newModel - the old Mancala board model
      */
-    private GameModel(GameModel newModel)
-    {
+    private GameModel(GameModel newModel){
         pits = new int[14];
         pits = Arrays.copyOf(newModel.pits, 14);
         currentPlayer = newModel.getCurrentPlayer();
-        gameOver = false;
-         
+        gameOver = false;   
     }
      
     /**
@@ -95,34 +84,29 @@ public class GameModel {
     }
      
     /**
-     * canUndo - looks at the amount of undos the player has, and returns true or false
+     * canUndo - looks at the amount of undos the player has, and returns true or false (max 3)
      * @return whether or not the player can undo
      */
     public boolean canUndo(){
-        switch(currentPlayer)
-        {
+        switch(currentPlayer){
             case A:
-                return (playerAUndos < 3);
-                                 
+                return (playerAUndos < 3);                          
             case B:
-                return (playerBUndos < 3);
-                                 
+                return (playerBUndos < 3);                      
             default:
                 throw new RuntimeException("Runtime Error!");
         }
     }
      
     /**
-     * undo - does the actual undoing of the board
+     * undo - erases the last move
      */
-    public void undo()
-    {
+    public void undo(){
         // if the player has exceeded the amount of undos, method exists
         if (!canUndo() || this.pits.equals(lastPit))
             return;
          
-        switch(currentPlayer)
-        {
+        switch(currentPlayer){
             case A:
             {
                 this.playerAUndos++; 
@@ -133,8 +117,7 @@ public class GameModel {
                 this.playerBUndos++;
                 break;
             }
-        }
-         
+        }       
         this.pits = Arrays.copyOf(lastPit,14);
         notifyAllListeners();               
     }
@@ -147,18 +130,14 @@ public class GameModel {
         int aSide = 0;
         int bSide = 0;
          
-        for (int i = 0; i < 14; i++)
-        {
-            if (!isMancala(i))
-            {
-                 
+        for (int i = 0; i < 14; i++){
+            if (!isMancala(i)){          	
                 if (getOwner(i).equals(Player.A))
                     aSide += pits[i];
                 else
                     bSide += pits[i];
             }
         }
-         
         return (aSide == 0 || bSide == 0);
     }
      
@@ -166,23 +145,21 @@ public class GameModel {
      * switchTurn - switches turn to the other player
      */
     public void switchTurn(){   
-                switch(currentPlayer)
-        {
+    	switch(currentPlayer){
             case A:
-                currentPlayer = Player.B;
-                                break;
+            	currentPlayer = Player.B;
+            	break;
             case B:
                 currentPlayer = Player.A;
-                            break;
+                break;
         }
-                System.out.println(currentPlayer + " is up.");
+    	System.out.println(currentPlayer + " is up.");
     }
      
     /**
      * save - will save the current state of the board
      */
-    public void save()
-    {
+    public void save(){
         lastPit = pits.clone();
     }
      
@@ -191,8 +168,7 @@ public class GameModel {
      * @param indexOfPit - the index of the pit (0-5 A, 6 Mancala pit ofA, 7-12 B, 13 Mancala pit of B)
      * @return either Player A or B
      */
-    private Player getOwner(int indexOfPit)
-    {
+    private Player getOwner(int indexOfPit){
         if (indexOfPit >= 0 && indexOfPit <= 6)
             return Player.A;
         else
@@ -204,27 +180,21 @@ public class GameModel {
      * @param indexOfPit
      * @return the corresponding pit on the other side
      */
-    private int opponentPitEquiv(int indexOfPit)
-    {
+    private int opponentPitEquiv(int indexOfPit){
         return Math.abs(12 - indexOfPit);
     }
      
     /**
      * collectStones - after winning the game, the stones will be put into Mancala pit
      */
-    private void collectStones()
-    {
-        for (int i = 0; i < 14; i++)
-        {
-            if (!isMancala(i))
-            {
-                if (getOwner(i).equals(Player.A))
-                {
+    private void collectStones(){
+        for (int i = 0; i < 14; i++){
+            if (!isMancala(i)){
+                if (getOwner(i).equals(Player.A)){
                     pits[6] += pits[i];
                     pits[i] = 0;
                 }
-                else
-                {
+                else{
                     pits[13] += pits[i];
                     pits[i] = 0;
                 }
@@ -266,37 +236,39 @@ public class GameModel {
     		 		stonesInHand--;
     		 		}
          
-        // depending on the last stone, determines if turn is continued, or switches players
-         
-        // empty pit on player's own side
-        if (getOwner(index).equals(currentPlayer) && pits[index] == 1 
-        		&& pits[opponentPitEquiv(index)] > 0 && !isMancala(index)){
-        	
-            // taking opponent's stones
-            int taken = pits[index] + pits[opponentPitEquiv(index)];
-            pits[index] = 0;
-            pits[opponentPitEquiv(index)] = 0;
-             
-            if (currentPlayer == Player.A){
-                pits[6] += taken;
-            }
-            else{
-                pits[13] += taken;
-            }
-            switchTurn();} 
-        else if(!isMancala(index)){
-        	switchTurn();
-        	}
-         
-        if (gameOverCheck()){
-            collectStones();
-            gameOver = true;
-        }
-        	this.notifyAllListeners();
-        }
+	        // depending on the last stone, determines if turn is continued, or switches players
+	         
+	        // empty pit on player's own side
+	        if (getOwner(index).equals(currentPlayer) && pits[index] == 1 
+	        		&& pits[opponentPitEquiv(index)] > 0 && !isMancala(index)){
+	        	
+	            // taking opponent's stones
+	            int taken = pits[index] + pits[opponentPitEquiv(index)];
+	            pits[index] = 0;
+	            pits[opponentPitEquiv(index)] = 0;
+	             
+	            if (currentPlayer == Player.A){
+	                pits[6] += taken;
+	            }
+	            else{
+	                pits[13] += taken;
+	            }
+	            switchTurn();
+	        } 
+	        else if(!isMancala(index)){
+	        	switchTurn();
+	        	}
+	         
+	        if (gameOverCheck()){
+	            collectStones();
+	            gameOver = true;
+	        }
+	        	this.notifyAllListeners();
+	    }
     	 
-    	 else
-    	 {System.out.println("Error. Invalid move!");}
+    	 else{
+    		 System.out.println("Error. Invalid move!");
+    	}
     }
      
     /**
@@ -304,13 +276,11 @@ public class GameModel {
      * @param indexOfPit
      * @return true or false whether it is a Mancala pit
      */
-    public boolean isMancala(int indexOfPit)
-    {
+    public boolean isMancala(int indexOfPit){
         return (indexOfPit == 6 || indexOfPit == 13);
     }
 
-    public int[] getData()
-    {
+    public int[] getData(){
         return pits;
     }
 }
